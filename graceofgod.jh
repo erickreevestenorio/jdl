@@ -1,0 +1,95 @@
+entity Region {
+	regionName String
+}
+
+entity Country {
+	countryName String
+}
+
+// an ignored comment
+/** not an ignored comment */
+entity Location {
+	streetAddress String,
+	postalCode String,
+	city String,
+	stateProvince String
+}
+
+entity Ministry {
+	ministryName String required,
+    ministryCode String
+}
+
+entity MemberHistory{
+	dedicationDate Instant,
+    waterBaptismDate Instant,
+    profileCreationDate Instant
+	language Language
+}
+/**
+ * The Employee entity.
+ */
+entity Member {
+	/**
+	* The firstname attribute.
+	*/
+    userName String,
+	firstName String,
+    middleName String,
+	lastName String,
+	email String,
+	phoneNumber String,
+	creationDate Instant,
+    avatar String
+}
+
+
+enum Language {
+    FRENCH, ENGLISH, FILIPINO, SPANISH
+}
+
+relationship OneToOne {
+	Country{region} to Region
+}
+
+relationship OneToOne {
+	Location{country} to Country
+}
+
+relationship OneToOne {
+	Member{location} to Location
+}
+
+
+// defining multiple OneToMany relationships with comments
+relationship OneToMany {
+	/**
+	* A relationship
+	*/
+	Ministry{member} to
+	/**
+	* Another side of the same relationship
+	*/
+	Member
+}
+
+relationship ManyToOne {
+	Member{pastor} to Member
+}
+
+// defining multiple oneToOne relationships
+relationship OneToOne {
+	MemberHistory{member} to Member
+}
+
+// Set pagination options
+paginate MemberHistory, Member with infinite-scroll
+
+// Use Data Transfert Objects (DTO)
+// dto * with mapstruct
+
+// Set service options to all except few
+service all with serviceImpl except Member
+
+// Set an angular suffix
+// angularSuffix * with mySuffix
